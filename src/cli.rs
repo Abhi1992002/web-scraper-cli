@@ -1,4 +1,7 @@
+
 use clap::{Parser};
+use crate::crawler::fetcher::fetch_url;
+
 
 #[derive(Parser)]
 #[derive(Debug)]
@@ -15,11 +18,22 @@ pub struct CliIntialArgs{
 
     #[arg(short = 'o', long = "output", value_name = "FILE", help = "Output file for crawled URLs")]
     output: String
+    
 }
 
-pub fn new() -> CliIntialArgs{
+pub async  fn new() -> CliIntialArgs{
    let intitial_args = CliIntialArgs::parse();
-   
- 
+
+   let url = &intitial_args.url;
+
+   let html_content =  fetch_url(&url).await;
+
+   match html_content {
+       Ok(content) => {
+        println!("hTML CONTENT : {}",content);
+       }
+       Err(e) => {println!("{:?}",e);}
+   }
+
    return intitial_args;
 }
