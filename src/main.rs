@@ -1,3 +1,6 @@
+mod cli;
 fn main() {
-    println!("Hello, world!");
+    // starting my cli
+    let initial_args  = cli::new();
+    println!("{:?}",initial_args);
 }
