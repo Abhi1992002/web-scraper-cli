@@ -20,6 +20,6 @@ pub struct CliIntialArgs{
 pub fn new() -> CliIntialArgs{
    let intitial_args = CliIntialArgs::parse();
    
-
+ 
    return intitial_args;
 }
