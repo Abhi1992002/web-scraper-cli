@@ -11,8 +11,5 @@ async fn main() {
    
     write_header("output.csv", &vec!["Name","Age"]).unwrap();
     write_content("output.csv", &vec!["Abhimanyu","12"]).unwrap();
-
-
     
-
 }
