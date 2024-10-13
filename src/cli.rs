@@ -1,7 +1,6 @@
 use std::io::{self, Write};
 use colored::*;
 use clap::{Parser,Subcommand};
-use reqwest::Url;
 use crate::crawler::fetcher::fetch_url;
 
 
