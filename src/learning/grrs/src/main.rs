@@ -1,5 +1,10 @@
 use clap::Parser;
 use anyhow::{Context, Result};
+use std::io::{self, Write};
+use indicatif::ProgressBar;
+use std::thread;
+use std::time::Duration;
+use log::{debug, error, info};
 
 #[derive(Parser)] // It will parse the arguments you gave in commands into these fields
 struct Cli{
@@ -25,6 +30,8 @@ fn main() -> Result<()>{
     // };
 
     // println!("pattern: {:?}, path: {:?}", args.pattern, args.path)
+    env_logger::init(); // if we give RUST_LOG=error, it will only print Error, if info - then print Error and info and if debug, then print all 3
+    // we are using this adapter to see a particular type of log, by passing the enviromnemnt variable RUST_LOG=
 
     let args = Cli::parse();
 
@@ -69,6 +76,36 @@ fn main() -> Result<()>{
         }
     }
     // I am using this command - cargo run -- -p=main some-main.rs
+    
+    // Output 
+    // We do not want to flush() on terminal everytime, we could print ihem into a block
+    // we store the print into buffer 
+
+    let stdout = io::stdout();
+    let mut handler = io::BufWriter::new(stdout); 
+    writeln!(handler,"foo: {}",42);
+
+    // prevents the system from locking and unlocking stdout over and over again.
+    let stdout = io::stdout(); // get the global stdout entity
+    let mut handle = stdout.lock(); // acquire a lock on it
+    writeln!(handle, "foo: {}", 42);
+
+    // we can add progress bar using indicatif
+    // let pb = ProgressBar::new(1024);
+
+
+    // for _ in 0..1024{
+    //     thread::sleep(Duration::from_millis(5));
+    //     pb.inc(1);
+    // }
+
+    // pb.finish_with_message("done");
+
+    info!("Print Somrthing");
+    error!("error");
+    debug!("debug");
+
+   
 
     Ok(())
      
