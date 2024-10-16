@@ -64,17 +64,14 @@ fn main() -> Result<()>{
     // using this map_err is very common, but we do not want to store err, so in real life we uses library called anyhow
     let content = std::fs::read_to_string(&args.path).with_context(|| format!("could not read file `{:?}`", args.path.display()))?;
     // Just return the Result imported from the Result
+    
+    grrs::find_matches(&content,&args.pattern,&mut std::io::stdout()); // stdout implement write trait and with the help of this we can write daa on terminal
 
     // we got below error
     // Error: could not read file `test.txt`
     // Caused by:
     // No such file or directory (os error 2)
 
-    for line in content.lines(){
-        if line.contains(&args.pattern){
-            println!("{}",line);
-        }
-    }
     // I am using this command - cargo run -- -p=main some-main.rs
     
     // Output 
@@ -109,4 +106,29 @@ fn main() -> Result<()>{
 
     Ok(())
      
+}
+
+
+// I want to write the test for the find_matches
+#[test]
+fn find_a_match() {
+    let mut result = Vec::new();
+    grrs::find_matches("lorem ipsum\ndolor sit amet", "lorem", &mut result); // we have write the content on result
+    // find_matches function will goiing to print the output on the terminal,
+    // so how could we compare it
+    // we need to make it testable, you know to write something, stdout function uses Write trait
+    // Why Use std::io::Write Instead of std::fmt::Write?
+    // stdout expects bytes, io::Write work with bytes but fmt::Write work with string
+    // but result vextor captures the data in bytes, so i has converted the string in bytes
+    assert_eq!(result, b"lorem ipsum\n")
+}        
+
+
+fn answer() -> i32{
+    42
+}
+
+#[test]
+fn check_answer_validity(){
+    assert_eq!(answer(),42)
 }
